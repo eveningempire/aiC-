@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer模型演示</title>
+    <style>
+        :root {
+            --primary-color: #4a6baf;
+            --secondary-color: #253b6e;
+            --accent-color: #f9a826;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --light-gray: #e0e5ec;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: var(--secondary-color);
+            margin: 20px 0;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 15px 0;
+            font-size: 1.3rem;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+        
+        .architecture {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .model-visualization {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+        }
+        
+        .transformer-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .transformer-block {
+            width: 600px;
+            position: relative;
+        }
+        
+        .layer {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .layer-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .multi-head-attention {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        
+        .attention-head {
+            background-color: rgba(74, 107, 175, 0.2);
+            border-radius: 6px;
+            padding: 10px;
+            flex: 1;
+            margin: 0 5px;
+            text-align: center;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 24px;
+            margin: 5px 0;
+            color: var(--secondary-color);
+        }
+        
+        .code-section {
+            background-color: #253b6e;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.5;
+            white-space: pre;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-title {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        @media (max-width: 768px) {
+            .transformer-block {
+                width: 100%;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Transformer模型实现</h1>
+            <p class="description">
+                一个基于C++的简化Transformer模型实现，展示了其核心组件和工作原理
+            </p>
+        </header>
+        
+        <section class="architecture">
+            <h2>Transformer架构</h2>
+            <p>
+                Transformer是一种基于自注意力机制的神经网络架构，不依赖循环或卷积结构，能够有效处理序列数据。
+                本实现展示了Transformer的核心组件。
+            </p>
+            
+            <div class="model-visualization">
+                <h3>模型结构</h3>
+                <div class="transformer-container">
+                    <div class="transformer-block">
+                        <div class="layer">
+                            <div class="layer-title">输入 + 位置编码</div>
+                            <p>为输入序列添加位置信息</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="layer">
+                            <div class="layer-title">多头自注意力</div>
+                            <div class="multi-head-attention">
+                                <div class="attention-head">头 1</div>
+                                <div class="attention-head">头 2</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="layer">
+                            <div class="layer-title">Add & Norm</div>
+                            <p>残差连接 + 层归一化</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="layer">
+                            <div class="layer-title">前馈神经网络</div>
+                            <p>两层全连接网络 with ReLU</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="layer">
+                            <div class="layer-title">Add & Norm</div>
+                            <p>残差连接 + 层归一化</p>
+                        </div>
+                        
+                        <div class="arrow">↓</div>
+                        
+                        <div class="layer">
+                            <div class="layer-title">输出</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>核心组件</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-title">多头自注意力</div>
+                    <p>
+                        允许模型同时关注不同位置。
+                        实现方式是将查询、键和值矩阵分解为多个头，分别计算注意力，然后拼接。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-title">位置编码</div>
+                    <p>
+                        由于Transformer不使用循环结构，需要通过位置编码提供序列位置信息。
+                        使用正弦和余弦函数生成不同频率的位置编码。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-title">层归一化</div>
+                    <p>
+                        将每个样本在特征维度上归一化，加速训练并稳定网络。
+                        在每个子层的输出上应用。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-title">残差连接</div>
+                    <p>
+                        通过添加子层的输入和输出，形成残差连接。
+                        帮助训练更深的网络，防止梯度消失。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>代码示例</h2>
+            
+            <div class="code-section">
+                <code>
+// 初始化Transformer
+int d_model = 16;         // 模型维度
+int nhead = 2;            // 注意力头数
+int dim_feedforward = 32; // 前馈网络维度
+int seq_len = 5;          // 最大序列长度
+
+Transformer transformer(d_model, nhead, dim_feedforward, seq_len);
+
+// 创建输入
+Matrix input(3, d_model); // 3个token序列
+
+// 前向传播
+Matrix output = transformer.predict(input);
+                </code>
+            </div>
+        </section>
+        
+        <footer>
+            <p>&copy; 2023 Transformer C++实现 | 一个简化的注意力机制演示</p>
+        </footer>
+    </div>
+</body>
+</html>
